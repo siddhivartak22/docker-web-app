@@ -1,0 +1,250 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+html, body {
+  height: 100%;
+}
+* {
+    margin-top: 0%;
+  box-sizing: border-box;
+  background-color: teal;
+}
+.column1 {
+  float: left;
+  width: 42%;
+  padding: 50px;
+  height: 300px; /* Should be removed. Only for demonstration */
+  background-color: yellow;
+  margin: 20px;
+  margin-left: 50px;
+}
+.column2 {
+  float: left;
+  width: 42%;
+  padding: 50px;
+  height: 300px; /* Should be removed. Only for demonstration */
+  background-color: yellow;
+  margin: 20px;
+  margin-left: 50px;
+}
+
+
+/* Clear floats after the columns */
+.row1:after {
+  display: table;
+  clear: both;
+}
+.column3 {
+  float: left;
+  width: 42%;
+  padding: 50px;
+  height: 300px; /* Should be removed. Only for demonstration */
+  background-color: yellow;
+  margin: 20px;
+  margin-left: 50px;
+}
+.column4 {
+  float: left;
+  width: 42%;
+  padding: 50px;
+  height: 300px; /* Should be removed. Only for demonstration */
+  background-color: yellow;
+  margin: 20px;
+  margin-left: 50px;
+}
+
+
+/* Clear floats after the columns */
+.row2:after {
+  display: table;
+  clear: both;
+}
+.column5 {
+  float: left;
+  width: 42%;
+  padding: 50px;
+  height: 300px; /* Should be removed. Only for demonstration */
+  background-color: yellow;
+  margin: 20px;
+  margin-left: 50px;
+}
+.column6 {
+  float: left;
+  width: 42%;
+  padding: 30px;
+  height: 300px; /* Should be removed. Only for demonstration */
+  background-color: yellow;
+  margin: 20px;
+  margin-left: 50px;
+}
+
+
+/* Clear floats after the columns */
+.row3:after {
+  display: table;
+  clear: both;
+}
+.button_slide {
+    margin-left: 35%;
+    color: #FFF;
+    border: 2px solid rgb(216, 2, 134);
+    border-radius: 0px;
+    padding: 18px 36px;
+    display: inline-block;
+    font-family: "Lucida Console", Monaco, monospace;
+    font-size: 14px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    box-shadow: inset 0 0 0 0 #D80286;
+    -webkit-transition: ease-out 0.4s;
+    -moz-transition: ease-out 0.4s;
+    transition: ease-out 0.4s;
+}
+.slide_down:hover {
+  box-shadow: inset 0 100px 0 0 #D80286;
+}
+</style>
+    </head>
+    <body>
+<script>
+    function containers(){
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "http://192.168.0.110/cgi-bin/server.py?x=docker+ps" , true);
+            xhr.send();
+
+            xhr.onload = function() {
+                    var output = xhr.responseText;
+                    document.getElementById("run").innerHTML = output;
+		    xhr.abort();
+
+            }
+
+    }
+    function img(){
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "http://192.168.0.110/cgi-bin/server.py?x=docker+images" , true);
+            xhr.send();
+
+            xhr.onload = function() {
+                    var output = xhr.responseText;
+                    document.getElementById("present").innerHTML = output;
+		    xhr.abort();
+            }
+
+    }
+    function crun(){
+
+            var r = document.getElementById("containerName").value
+            var p = document.getElementById("select_image").selectedIndex;
+            var q = document.getElementById("select_image").options;
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open("GET", "http://192.168.0.110/cgi-bin/server.py?x=docker%20run%20-dit%20--name%20"+ r +"%20"+ q[p].text +":latest" , true);
+            xhr.send();
+
+	    
+		    var output = "Your docker container is launched";
+		    document.getElementById("containerRun").innerHTML = output;
+		    xhr.abort();
+
+    }
+    function fileCreate(){
+      var u = document.getElementById("in2").value
+      var v = document.getElementById("in3").value
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "http://192.168.0.110/cgi-bin/server.py?x=docker%20exec%20-d%20"+ u +"%20touch%20%2Froot%2F"+ v , true);
+            xhr.send();
+
+            var answer = "File created";
+            document.getElementById("createdFile").innerHTML = answer;
+
+    }
+    function removeImage(){
+      var w = document.getElementById("remove_image").selectedIndex;
+      var z = document.getElementById("remove_image").options;
+
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open("GET", "http://192.168.0.106/cgi-bin/server.py?remove="+z[w].text , true);
+            xhr.send();
+            var removeNow = "Image is removed";
+            document.getElementById("removingImage").innerHTML = removeNow;
+            
+          }
+
+
+</script>
+  <h2 style="font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; font-weight: 200; color: black; text-align: center;">Docker Application</h2>
+  <div id="row1">
+     <!-- Containers in running state: docker ps--> 
+    <div class="column1">
+        <h3 style="background-color: yellow; text-align: center;">Containers in Running State</h3>
+      <div class="button_slide slide_down" style="background-color:darkslateblue;" onclick="containers()">status</div>
+      <br/><br/>
+      <pre style="background-color: yellow;">
+      <div id="run" style="background-color: yellow; font-weight: bold; text-align: center; overflow-y: scroll; overflow-x: scroll;">State of containers will be shown here...</div></pre>
+    </div>
+
+    <!--Docker Images: docker images-->
+    <div class="column2">
+        <h3 style="background-color: yellow; text-align: center;">Docker Images</h3>
+        <div class="button_slide slide_down" style="background-color: darkslateblue;" onclick="img()">Check out</div>
+      <br/><br/>
+      <pre style="background-color: yellow;">
+      <div id="present" style="background-color: yellow; font-weight: bold; text-align: center; overflow-y: scroll; overflow-x: scroll;">Total images will be shown here..</div></pre>
+    </div>
+  </div>
+  <div id="row2">
+    <!--Running or launching a container: docker run-->
+    <div class="column3">
+      <h3 style="background-color: yellow; text-align: center;">Run a docker container</h3>
+      <p style="background-color: yellow; text-align: left;">Select Image:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <select id="select_image" style="background-color:darkslateblue; color:white;">
+        <option style="color: white;">Select..</option>
+        <option style="color: white;">centos</option>
+        <option style="color: white;">httpd</option>
+        <option style="color: white;">rhel8</option>
+        <option style="color: white;">ubuntu</option>
+      </select></p>
+      <p style="background-color: yellow;">Enter container name:<input id="containerName" style="background-color: darkslateblue; color: white;"></p>
+      <div class="button_slide slide_down" style="background-color: darkslateblue;" onclick="crun()">Check out</div>
+      <br/><br/>
+      <div id="containerRun" style="background-color: yellow; font-weight: bold; text-align: center;">status will be shown here..</div>
+    </div>
+
+    <!--Creating a file in a container-->
+    <div class="column4">
+      <h3 style="background-color: yellow; text-align: center;">Create a file in a container</h3>
+      <p style="background-color: yellow;">container name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="in2" style="background-color: darkslateblue; color: white;"></p>
+      <p style="background-color: yellow;">file name:&nbsp;&nbsp;&nbsp;&nbsp;<input id="in3" style="background-color: darkslateblue; color: white;"></p>
+      <div class="button_slide slide_down" style="background-color: darkslateblue;" onclick="fileCreate()">create file</div>
+      <br/><br/>
+      <div id="createdFile" style="background-color: yellow; font-weight: bold; text-align: center;">status will be shown here..</div>
+    </div>
+  </div>
+  <div id="row3">
+      <!-- Remove Image-->
+    <div class="column5">
+      <h3 style="background-color: yellow; text-align: center;">Remove an Image</h3>
+      <p style="background-color: yellow; text-align: left;">Select image
+      <select id="remove_image" style="background-color:darkslateblue; color:white;">
+        <option style="color: white;">Select..</option>
+        <option style="color: white;">centos</option>
+        <option style="color: white;">httpd</option>
+        <option style="color: white;">rhel8</option>
+        <option style="color: white;">ubuntu</option>
+      </select></p>
+      <div class="button_slide slide_down" style="background-color: darkslateblue;" onclick="removeImage()">remove</div>
+      <br/><br/>
+      <div id="removingImage" style="background-color: yellow; font-weight: bold; text-align: center;">status will be shown here..</div>
+    </div>
+    <div class="column6">
+        <img src="docker.png" alt="docker" width="500" height="250">
+    </div>
+  </div>
+</body>
+</html>
